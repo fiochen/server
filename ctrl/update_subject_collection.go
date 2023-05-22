@@ -47,6 +47,7 @@ func (ctl Ctrl) UpdateSubjectCollection(
 	ctx context.Context,
 	u auth.Auth,
 	subjectID model.SubjectID,
+	subjectType model.SubjectType,
 	req UpdateCollectionRequest,
 	allowCreate bool,
 ) error {
@@ -55,7 +56,7 @@ func (ctl Ctrl) UpdateSubjectCollection(
 	if allowCreate {
 		met = ctl.collection.UpdateOrCreateSubjectCollection
 	}
-	err := met(ctx, u.ID, subjectID, time.Now(), req.IP,
+	err := met(ctx, u.ID, subjectID, subjectType, time.Now(), req.IP,
 		func(ctx context.Context, s *collection.Subject) (*collection.Subject, error) {
 			if req.Comment.Set {
 				s.ShadowBan(ctl.dam.NeedReview(req.Comment.Value))
@@ -102,7 +103,6 @@ func (ctl Ctrl) UpdateSubjectCollection(
 	if err != nil {
 		return err
 	}
-
 	return ctl.mayCreateTimeline(ctx, u, req, subjectID)
 }
 

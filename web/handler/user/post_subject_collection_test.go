@@ -53,9 +53,10 @@ func TestUser_PostSubjectCollection(t *testing.T) {
 		Return(nil)
 
 	c := mocks.NewCollectionRepo(t)
-	c.EXPECT().UpdateOrCreateSubjectCollection(mock.Anything, uid, sid, mock.Anything, mock.Anything, mock.Anything).
+	c.EXPECT().UpdateOrCreateSubjectCollection(mock.Anything, uid, sid,
+		mock.Anything, mock.Anything, mock.Anything, mock.Anything).
 		Run(func(ctx context.Context, userID uint32,
-			subjectID uint32, at time.Time, ip string,
+			subjectID uint32, subjectType uint8, at time.Time, ip string,
 			update func(context.Context, *collection.Subject) (*collection.Subject, error)) {
 			require.Equal(t, "0.0.0.0", ip)
 			s = lo.Must(update(context.Background(), s))
@@ -101,9 +102,10 @@ func TestUser_PostSubjectCollectionPartialData(t *testing.T) {
 		Return(nil)
 
 	c := mocks.NewCollectionRepo(t)
-	c.EXPECT().UpdateOrCreateSubjectCollection(mock.Anything, uid, sid, mock.Anything, mock.Anything, mock.Anything).
+	c.EXPECT().UpdateOrCreateSubjectCollection(mock.Anything, uid, sid,
+		mock.Anything, mock.Anything, mock.Anything, mock.Anything).
 		Run(func(ctx context.Context, userID uint32,
-			subjectID uint32, at time.Time, ip string,
+			subjectID uint32, subjectType uint8, at time.Time, ip string,
 			update func(context.Context, *collection.Subject) (*collection.Subject, error)) {
 			require.Equal(t, "0.0.0.0", ip)
 			s = lo.Must(update(context.Background(), s))

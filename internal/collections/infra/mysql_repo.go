@@ -85,6 +85,7 @@ func (r mysqlRepo) UpdateSubjectCollection(
 	ctx context.Context,
 	userID model.UserID,
 	subjectID model.SubjectID,
+	subjectType model.SubjectType,
 	at time.Time,
 	ip string,
 	update func(ctx context.Context, s *collection.Subject) (*collection.Subject, error),
@@ -96,13 +97,14 @@ func (r mysqlRepo) UpdateSubjectCollection(
 		}
 		return err
 	}
-	return r.updateOrCreateSubjectCollection(ctx, userID, subjectID, at, ip, update, s)
+	return r.updateOrCreateSubjectCollection(ctx, userID, subjectID, subjectType, at, ip, update, s)
 }
 
 func (r mysqlRepo) UpdateOrCreateSubjectCollection(
 	ctx context.Context,
 	userID model.UserID,
 	subjectID model.SubjectID,
+	subjectType model.SubjectType,
 	at time.Time,
 	ip string,
 	update func(ctx context.Context, s *collection.Subject) (*collection.Subject, error),
@@ -114,13 +116,14 @@ func (r mysqlRepo) UpdateOrCreateSubjectCollection(
 		}
 		s = nil
 	}
-	return r.updateOrCreateSubjectCollection(ctx, userID, subjectID, at, ip, update, s)
+	return r.updateOrCreateSubjectCollection(ctx, userID, subjectID, subjectType, at, ip, update, s)
 }
 
 func (r mysqlRepo) updateOrCreateSubjectCollection(
 	ctx context.Context,
 	userID model.UserID,
 	subjectID model.SubjectID,
+	subjectType model.SubjectType,
 	at time.Time,
 	ip string,
 	update func(ctx context.Context, s *collection.Subject) (*collection.Subject, error),
@@ -129,8 +132,9 @@ func (r mysqlRepo) updateOrCreateSubjectCollection(
 	created := obj == nil
 	if created {
 		obj = &dao.SubjectCollection{
-			SubjectID: subjectID,
-			UserID:    userID,
+			SubjectID:   subjectID,
+			SubjectType: subjectType,
+			UserID:      userID,
 		}
 	}
 	collectionSubject, err := r.convertToSubjectCollection(obj)
