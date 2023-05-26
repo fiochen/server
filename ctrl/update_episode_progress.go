@@ -128,7 +128,9 @@ func (ctl Ctrl) UpdateEpisodeCollection(
 		return err
 	}
 
-	err = ctl.timeline.ChangeEpisodeStatus(ctx, u, s, e)
+	if t == collection.EpisodeCollectionDone {
+		err = ctl.timeline.ChangeEpisodeStatus(ctx, u, s, e)
+	}
 
 	return errgo.Wrap(err, "timeline.ChangeEpisodeStatus")
 }
